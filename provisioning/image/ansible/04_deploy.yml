@@ -35,19 +35,6 @@
       shell: PATH=/home/isucon/.local/go/bin:$PATH GOROOT=/home/isucon/.local/go GOPATH=/home/isucon/webapp/go make all
       args:
         chdir: /home/isucon/webapp/go
-    - name: composer
-      get_url:
-        url: http://getcomposer.org/composer.phar
-        dest: /home/isucon/webapp/php/composer.phar
-        mode: 0755
-    - name: php
-      shell: PATH=/home/isucon/.local/php/bin:$PATH php composer.phar install
-      args:
-        chdir: /home/isucon/webapp/php
-    - name: php-fpm (isuda)
-      copy: src=../files/isuda.php-fpm.conf  dest=/home/isucon/.local/php/etc/isuda.php-fpm.conf  owner=isucon group=isucon mode=644
-    - name: php-fpm (isutar)
-      copy: src=../files/isutar.php-fpm.conf dest=/home/isucon/.local/php/etc/isutar.php-fpm.conf owner=isucon group=isucon mode=644
 
 - hosts: all
   gather_facts: no
@@ -97,10 +84,6 @@
       copy: src=../files/isuda.scala.service dest=/etc/systemd/system/isuda.scala.service owner=root mode=644
     - name: scala isutar (systemd)
       copy: src=../files/isutar.scala.service dest=/etc/systemd/system/isutar.scala.service owner=root mode=644
-    - name: php isuda (systemd)
-      copy: src=../files/isuda.php.service dest=/etc/systemd/system/isuda.php.service owner=root mode=644
-    - name: php isutar (systemd)
-      copy: src=../files/isutar.php.service dest=/etc/systemd/system/isutar.php.service owner=root mode=644
     - name: default application selection (isupam)
       service: name=isupam state=running enabled=true
     - name: default application selection (isuda)
